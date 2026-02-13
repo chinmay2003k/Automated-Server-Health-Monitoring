@@ -1,0 +1,21 @@
+
+name: Docker Image Push
+
+on:
+  workflow_dispatch:   # Manual trigger
+
+jobs:
+  publish_images:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t chinmaykhairnar/my-nginx-image:latest .
+
+      - name: Login to Docker Hub
+        run: echo ${{ secrets.DOCKER_HUB_TOKEN }} | docker login -u chinmaykhairnar --password-stdin
+
+      - name: Push Docker image
+        run: docker push chinmaykhairnar/my-nginx-image:latest
